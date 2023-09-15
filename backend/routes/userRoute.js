@@ -12,6 +12,11 @@ router.patch('/resetPassword/:token', authController.resetPassword);
 router.use(authController.protect);
 router.patch('/updatePassword', authController.updatePassword);
 
+// Follow a user
+router.patch('/:id/follow', userController.followUser);
+// Unfollow a user
+router.patch('/:id/unfollow', userController.unfollowUser);
+
 router.use(authController.restrictTo('admin'));
 router.get('/', userController.getAllUsers);
 router

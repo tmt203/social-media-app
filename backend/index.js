@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const userRoute = require('./routes/userRoute');
+const postRoute = require('./routes/postRoute');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controller/errorController');
 dotenv.config();
@@ -26,6 +27,7 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 app.use("/api/users", userRoute);
+app.use("/api/posts", postRoute);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl} on this server`, 404));
 })

@@ -20,7 +20,38 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user'
   },
-  photo: String,
+  profilePicture: {
+    type: String,
+    default: ''
+  },
+  coverPictures: {
+    type: String, 
+    default: ''
+  },
+  followers: {
+    type: Array,
+    default: [],
+  },
+  followings: {
+    type: Array,
+    default: [],
+  },
+  desc: {
+    type: String,
+    max: 50,
+  },
+  city: {
+    type: String,
+    max: 50,
+  },
+  from: {
+    type: String,
+    max: 50,
+  },
+  relationship: {
+    type: Number,
+    enum: [1, 2, 3],
+  },
   password: {
     type: String,
     required: [true, 'A user must have a password.'],
@@ -44,7 +75,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false
-  }
+  }, 
 }, {
   timestamps: true,
 });
