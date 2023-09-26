@@ -20,7 +20,7 @@ module.exports = {
     if (req.body.password || req.body.confirmPassword) {
       return next(new AppError('This route is not for update password. Please use /updatePassword instead.', 400));
     }
-    const filterBody = filterObject(req.body, 'firstName', 'lastName', 'mobile');
+    const filterBody = filterObject(req.body, 'firstName', 'lastName', 'mobile', 'desc', 'city', 'from', 'relationship');
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
       new: true,
       runValidators: true
@@ -28,7 +28,7 @@ module.exports = {
 
     res.status(200).json({
       status: 'success',
-      data: { updatedUser }
+      user: updatedUser
     });
   }),
   deleteUser: catchAsync(async (req, res, next) => {

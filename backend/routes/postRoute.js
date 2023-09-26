@@ -13,9 +13,10 @@ const fillByOwner = (req, res, next) => {
   next();
 }
 
-router.get('/timeline', protect, postController.getTimeline);
+router.get('/timeline/:id', postController.getTimeline);
 router.get('/', protect, fillByOwner, postController.getAllPost);
 router.get('/:id', postController.getPost);
+router.get('/profile/:userId', postController.getCurrentUserPosts);
 
 router.use(protect);
 router.post('/', getAuthor, postController.createPost);

@@ -8,7 +8,7 @@ const createOne = (Model) => {
     doc["__v"] = undefined;
     res.status(201).json({
       status: "success",
-      data: { doc },
+      data: doc,
     });
   });
 };
@@ -25,7 +25,7 @@ const getAll = (Model) => {
     res.status(200).json({
       status: "success",
       results: doc.length,
-      data: { doc },
+      data: doc,
     });
   });
 };
@@ -41,7 +41,7 @@ const getOne = (Model, popOptions) => {
     }
     res.status(200).json({
       status: "success",
-      data: { doc },
+      data: doc,
     });
   });
 };
@@ -57,7 +57,7 @@ const updateOne = (Model) => {
     }
     res.status(200).json({
       status: "success",
-      data: { doc },
+      data: doc,
     });
   });
 };

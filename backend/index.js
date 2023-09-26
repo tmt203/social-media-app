@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
+const cors = require('cors');
 const morgan = require('morgan');
 const userRoute = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute');
@@ -21,7 +22,7 @@ mongoose
     console.log('Connected to MongoDB.');
   });
 
-
+app.use(cors());
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"));
@@ -33,4 +34,4 @@ app.all('*', (req, res, next) => {
 })
 app.use(globalErrorHandler);
 
-app.listen(3000, () => console.log('Backend server is running.'));
+app.listen(5000, () => console.log('Backend server is running.'));

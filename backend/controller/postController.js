@@ -1,5 +1,6 @@
 const factory = require('./handlerFactory');
 const Post = require('../models/postModel');
+const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -34,17 +35,27 @@ const updatePost = catchAsync(async (req, res, next) => {
 });
 
 const getTimeline = catchAsync(async (req, res, next) => {
-  const userPosts = await Post.find({ author: req.user._id });
+  const user = await User.findById(req.params.id);
+  const userPosts = await Post.find({ author: req.params.id });
   const friendPosts = await Promise.all(
-    req.user.followings.map(async (friendId) => {
+    user.followings.map(async (friendId) => {
       return await Post.find({ author: friendId });
     })
   );
 
   res.status(200).json({
-    status: 'success', 
-    data: userPosts.concat(...friendPosts)
+    status: 'success',
+    posts: userPosts.concat(...friendPosts)
   })
+});
+
+const getCurrentUserPosts = catchAsync(async (req, res, next) => {
+  const posts = await Post.find({ author: req.params.userId });
+
+  res.status(200).json({
+    status: 'success',
+    posts
+  });
 });
 
 module.exports = {
@@ -54,5 +65,6 @@ module.exports = {
   getPost: factory.getOne(Post),
   getAllPost: factory.getAll(Post),
   likePost,
-  getTimeline
+  getTimeline,
+  getCurrentUserPosts
 };
