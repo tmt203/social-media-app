@@ -50,7 +50,7 @@ const uploadImage = catchAsync(async (req, res, next) => {
 
 const getTimeline = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.id);
-  const userPosts = await Post.find({ author: req.params.id });
+  const userPosts = await Post.find({ author: req.params.id }).sort('-createdAt');
   const friendPosts = await Promise.all(
     user.followings.map(async (friendId) => {
       return await Post.find({ author: friendId });

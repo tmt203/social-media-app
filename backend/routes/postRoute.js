@@ -8,10 +8,10 @@ const router = express.Router();
 //   next();
 // };
 
-const fillByOwner = (req, res, next) => {
-  req.query['author'] = req.user._id;
-  next();
-}
+// const fillByOwner = (req, res, next) => {
+//   req.query['author'] = req.user._id;
+//   next();
+// }
 
 router.patch('/:id/like', postController.likePost);
 router.get('/:id', postController.getPost);
@@ -23,7 +23,7 @@ router
 router.get('/profile/:userId', postController.getCurrentUserPosts);
 router.get('/timeline/:id', postController.getTimeline);
 router.post('/uploadImage', postController.uploadSingle, postController.uploadImage);
-router.get('/', protect, fillByOwner, postController.getAllPost);
+router.get('/', postController.getAllPost);
 router.post('/', postController.createPost);
 
 module.exports = router;

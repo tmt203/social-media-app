@@ -33,6 +33,7 @@ export default function Share() {
 
     try {
       await axios.post(`${process.env.REACT_APP_API_HOST}/api/posts`, newPost);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
