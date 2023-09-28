@@ -14,7 +14,7 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await axios.get(`/users/${reqParams.id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_HOST}/api/users/${reqParams.id}`);
       setUser(response.data.data);
     };
 
@@ -31,12 +31,12 @@ export default function Profile() {
             <div className="profileCover">
               <img
                 className="profileCoverImg"
-                src={PF + (user.coverPicture || "person/defaultBackground.jpg")}
+                src={PF + (user.coverPicture || "/person/defaultBackground.jpg")}
                 alt="background"
               />
               <img
                 className="profileUserImg"
-                src={PF + (user.profilePicture || "person/defaultAvatar.png")}
+                src={PF + (user.profilePicture || "/person/defaultAvatar.png")}
                 alt="avatar"
               />
             </div>

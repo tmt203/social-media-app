@@ -1,21 +1,22 @@
 const factory = require('./handlerFactory');
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
+const fileUploader = require('../utils/fileUploader');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 const likePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
-  if (!post.likes.includes(req.user._id)) {
-    await post.updateOne({ $push: { likes: req.user._id } });
+  if (!post.likes.includes(req.body.userId)) {
+    await post.updateOne({ $push: { likes: req.body.userId } });
     return res.status(200).json({
       status: 'success',
       message: 'The post has been liked.'
     });
   }
 
-  await post.updateOne({ $pull: { likes: req.user._id } });
+  await post.updateOne({ $pull: { likes: req.body.userId } });
   res.status(200).json({
     status: 'success',
     message: 'The post has been unliked.'
@@ -31,6 +32,19 @@ const updatePost = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "The post has been updated."
+  });
+});
+
+const uploadSingle = fileUploader.single('file');
+
+const uploadImage = catchAsync(async (req, res, next) => {
+  if (!req.file) return next(new AppError('There is no image to upload.', 400));
+
+  console.log(req.file);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Upload image successfully.'
   });
 });
 
@@ -61,6 +75,8 @@ const getCurrentUserPosts = catchAsync(async (req, res, next) => {
 module.exports = {
   createPost: factory.createOne(Post),
   updatePost,
+  uploadSingle,
+  uploadImage,
   deletePost: factory.deleteOne(Post),
   getPost: factory.getOne(Post),
   getAllPost: factory.getAll(Post),

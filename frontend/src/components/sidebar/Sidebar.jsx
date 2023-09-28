@@ -1,7 +1,7 @@
-import "./sidebar.css"
 import { MdRssFeed, MdChat, MdOndemandVideo, MdGroups, MdBookmarks, MdQuestionMark, MdWork, MdEventNote, MdMenuBook } from "react-icons/md"
-import {Users} from "../../dummyData";
 import CloseFriend from "../closeFriend/CloseFriend";
+import "./sidebar.css"
+import { Users } from "../../dummyData";
 
 export default function Sidebar() {
   return (
@@ -48,7 +48,7 @@ export default function Sidebar() {
         <button type="button" className="sidebarButton">Show More</button>
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
-          {Users.map(u => <CloseFriend key={u.id} user={u} />)}         
+          {Users.map(u => <CloseFriend key={u.id} user={u} />)}
         </ul>
       </div>
     </div>

@@ -1,12 +1,16 @@
-import "./topbar.css"
+import { useContext } from "react"
 import { IoIosSearch, IoMdNotifications, IoIosChatbubbles, IoMdPerson } from "react-icons/io"
 import { Link } from "react-router-dom"
+import { AuthContext } from "../../context/AuthContext";
+import "./topbar.css"
 
 export default function Topbar() {
+  const { user } = useContext(AuthContext);
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <Link to={"/"} style={{textDecoration: "none"}}>
+        <Link to={"/"} style={{ textDecoration: "none" }}>
           <span className="logo">Facebook</span>
         </Link>
       </div>
@@ -35,7 +39,9 @@ export default function Topbar() {
             <span className="topbarIconBadge">1</span>
           </div>
         </div>
-        <img src="/assets/person/1.jpeg" alt="" className="topbarImg" />
+        <Link to={`/profile/${user._id}`}>
+          <img src={process.env.REACT_APP_PUBLIC_FOLDER + (user.profilePicture || "/person/defaultAvatar.png")} alt="" className="topbarImg" />
+        </Link>
       </div>
     </div>
   )

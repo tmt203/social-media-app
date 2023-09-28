@@ -1,25 +1,77 @@
+import { useContext, useRef, useState } from "react";
+import { ImLocation, ImPriceTag, ImSmile2, ImImage } from "react-icons/im";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 import "./share.css";
-import { ImLocation, ImPriceTag, ImSmile2, ImImage } from "react-icons/im"
 
 export default function Share() {
+  const { user } = useContext(AuthContext);
+  const desc = useRef();
+  const [file, setFile] = useState();
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    const newPost = {
+      author: user._id, 
+      desc: desc.current.value,       
+    };
+
+    if (file) {
+      const formData = new FormData();
+      const fileName = Date.now() + file.name;
+      formData.append('name', fileName); // File name must be passing before the file itself. Otherwise, it not works properly.
+      formData.append('file', file);
+      newPost.img = fileName;
+
+      try {
+        await axios.post(`${process.env.REACT_APP_API_HOST}/api/posts/uploadImage`, formData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    try {
+      await axios.post(`${process.env.REACT_APP_API_HOST}/api/posts`, newPost);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="share">
-      <div className="shareWrapper">
+      <form className="shareWrapper" onSubmit={submitHandler}>
         <div className="shareTop">
-          <img className="shareProfileImg" src="/assets/person/1.jpeg" alt="" />
+          <img
+            className="shareProfileImg"
+            src={
+              process.env.REACT_APP_PUBLIC_FOLDER +
+              (user.profilePicture || "/person/defaultAvatar.png")
+            }
+            alt=""
+          />
           <input
             type="text"
             className="shareInput"
-            placeholder="What's in your mind Safak ?"
+            placeholder={"What's in your mind " + user.username + "?"}
+            required
+            ref={desc}
           />
         </div>
         <hr className="shareHr" />
         <div className="shareBottom">
           <div className="shareOptions">
-            <div className="shareOption">
+            <label htmlFor="file" className="shareOption">
               <ImImage color="tomato" className="shareOptionIcon" />
               <span className="shareOptionText">Photo/Video</span>
-            </div>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                id="file"
+                accept=".png,.jpeg,.jpg"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+            </label>
             <div className="shareOption">
               <ImPriceTag color="blue" className="shareOptionIcon" />
               <span className="shareOptionText">Tag</span>
@@ -33,9 +85,11 @@ export default function Share() {
               <span className="shareOptionText">Feelings</span>
             </div>
           </div>
-          <button type="button" className="shareButton">Share</button>
+          <button type="submit" className="shareButton">
+            Share
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
