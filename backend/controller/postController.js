@@ -52,8 +52,8 @@ const getTimeline = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   const userPosts = await Post.find({ author: req.params.id }).sort('-createdAt');
   const friendPosts = await Promise.all(
-    user.followings.map(async (friendId) => {
-      return await Post.find({ author: friendId });
+    user.followings.map(friendId => {
+      return Post.find({ author: friendId });
     })
   );
 
@@ -64,7 +64,7 @@ const getTimeline = catchAsync(async (req, res, next) => {
 });
 
 const getCurrentUserPosts = catchAsync(async (req, res, next) => {
-  const posts = await Post.find({ author: req.params.userId });
+  const posts = await Post.find({ author: req.params.userId }).sort('-createdAt');
 
   res.status(200).json({
     status: 'success',

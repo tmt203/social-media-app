@@ -13,6 +13,15 @@ const filterObject = (obj, ...allowFields) => {
   return newObj;
 }
 
+const getFriends = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id).populate('followings', ['_id', 'username', 'profilePicture']);
+
+  res.status(200).json({
+    status: 'success',
+    friends: user.followings
+  });
+});
+
 module.exports = {
   getAllUsers: factory.getAll(User),
   getUser: factory.getOne(User),
@@ -70,4 +79,6 @@ module.exports = {
       message: 'user has been unfollowed'
     });
   }),
+
+  getFriends,
 };

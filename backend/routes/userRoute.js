@@ -3,8 +3,9 @@ const router = express.Router();
 const authController = require('../controller/authController');
 const userController = require('../controller/userController');
 
-router.get('/', userController.getAllUsers);
+router.get('/:id/friends', userController.getFriends);
 router.get('/:id', userController.getUser);
+router.get('/', userController.getAllUsers);
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
