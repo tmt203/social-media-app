@@ -1,5 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import { ImLocation, ImPriceTag, ImSmile2, ImImage } from "react-icons/im";
+import {MdOutlineCancel} from "react-icons/md"
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "./share.css";
@@ -7,7 +8,7 @@ import "./share.css";
 export default function Share() {
   const { user } = useContext(AuthContext);
   const desc = useRef();
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(null);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -18,6 +19,7 @@ export default function Share() {
     };
 
     if (file) {
+      console.log('enter here');
       const formData = new FormData();
       const fileName = Date.now() + file.name;
       formData.append('name', fileName); // File name must be passing before the file itself. Otherwise, it not works properly.
@@ -25,15 +27,15 @@ export default function Share() {
       newPost.img = fileName;
 
       try {
-        await axios.post(`${process.env.REACT_APP_API_HOST}/api/posts/uploadImage`, formData);
+        await axios.post(`${process.env.REACT_APP_API_HOST}api/posts/uploadImage`, formData);
       } catch (error) {
         console.log(error);
       }
     }
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_HOST}/api/posts`, newPost);
-      window.location.reload();
+      await axios.post(`${process.env.REACT_APP_API_HOST}api/posts`, newPost);
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +49,7 @@ export default function Share() {
             className="shareProfileImg"
             src={
               process.env.REACT_APP_PUBLIC_FOLDER +
-              (user.profilePicture || "/person/defaultAvatar.png")
+              (user.profilePicture || "person/defaultAvatar.png")
             }
             alt=""
           />
@@ -60,6 +62,12 @@ export default function Share() {
           />
         </div>
         <hr className="shareHr" />
+        {file && (
+          <div className="shareImgContainer">
+            <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
+            <MdOutlineCancel color="white" className="shareCancelImg" onClick={() => setFile(null)} />
+          </div>
+        )}
         <div className="shareBottom">
           <div className="shareOptions">
             <label htmlFor="file" className="shareOption">

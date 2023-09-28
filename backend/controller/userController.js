@@ -49,14 +49,14 @@ module.exports = {
   }),
 
   followUser: catchAsync(async (req, res, next) => {
-    if (req.user._id === req.params.id) return next(new AppError('You can not follow yourself.', 400));
+    if (req.body.userId === req.params.id) return next(new AppError('You can not follow yourself.', 400));
 
     const followedUser = await User.findById(req.params.id);
 
-    if (followedUser.followers.includes(req.user._id)) return next(new AppError('You already follow this user.', 403));
+    if (followedUser.followers.includes(req.body.userId)) return next(new AppError('You already follow this user.', 403));
 
-    await followedUser.updateOne({ $push: { followers: req.user._id } });
-    await req.user.updateOne({ $push: { followings: followedUser._id } });
+    await followedUser.updateOne({ $push: { followers: req.body.userId } });
+    await User.findByIdAndUpdate(req.body.userId, { $push: { followings: followedUser._id } });
 
     res.status(200).json({
       status: 'success',
@@ -65,14 +65,14 @@ module.exports = {
   }),
 
   unfollowUser: catchAsync(async (req, res, next) => {
-    if (req.user._id === req.params.id) return next(new AppError('You can not unfollow yourself.', 400));
+    if (req.body.userId === req.params.id) return next(new AppError('You can not unfollow yourself.', 400));
 
-    const unfollowedUser = await User.findById(req.params.id);
+    const followedUser = await User.findById(req.params.id);
 
-    if (!unfollowedUser.followers.includes(req.user._id)) return next(new AppError('You are not follow this user.', 403));
+    if (!followedUser.followers.includes(req.body.userId)) return next(new AppError('You are not follow this user.', 403));
 
-    await unfollowedUser.updateOne({ $pull: { followers: req.user._id } });
-    await req.user.updateOne({ $pull: { followings: unfollowedUser._id } });
+    await followedUser.updateOne({ $pull: { followers: req.body.userId } });
+    await User.findByIdAndUpdate(req.body.userId, { $pull: { followings: followedUser._id } });
 
     res.status(200).json({
       status: 'success',

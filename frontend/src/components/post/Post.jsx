@@ -15,7 +15,7 @@ export default function Post({ post }) {
 
   const likeHandler = async () => {
     try {
-      await axios.patch(`${process.env.REACT_APP_API_HOST}/api/posts/${post._id}/like`, { userId: currentUser._id });
+      await axios.patch(`${process.env.REACT_APP_API_HOST}api/posts/${post._id}/like`, { userId: currentUser._id });
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +29,7 @@ export default function Post({ post }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await axios.get(`${process.env.REACT_APP_API_HOST}/api/users/${post.author}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_HOST}api/users/${post.author}`);
 
       setUser(response.data.data);
     };
@@ -48,7 +48,7 @@ export default function Post({ post }) {
                 src={
                   user.profilePicture
                     ? PF + user.profilePicture
-                    : PF + "/person/defaultAvatar.png"
+                    : PF + "person/defaultAvatar.png"
                 }
                 alt="avatar"
               />
@@ -68,13 +68,13 @@ export default function Post({ post }) {
           <div className="postBottomLeft">
             <img
               className="likeIcon"
-              src={PF + "/like.png"}
+              src={PF + "like.png"}
               alt=""
               onClick={likeHandler}
             />
             <img
               className="likeIcon"
-              src={PF + "/heart.png"}
+              src={PF + "heart.png"}
               alt=""
               onClick={likeHandler}
             />

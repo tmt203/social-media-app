@@ -40,7 +40,7 @@ export default function Topbar() {
           </div>
         </div>
         <Link to={`/profile/${user._id}`}>
-          <img src={process.env.REACT_APP_PUBLIC_FOLDER + (user.profilePicture || "/person/defaultAvatar.png")} alt="" className="topbarImg" />
+          <img src={process.env.REACT_APP_PUBLIC_FOLDER + (user.profilePicture || "person/defaultAvatar.png")} alt="" className="topbarImg" />
         </Link>
       </div>
     </div>
