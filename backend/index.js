@@ -8,6 +8,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const userRoute = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute');
+const conversationRoute = require('./routes/conversationRoute');
+const messageRoute = require('./routes/messageRoute');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controller/errorController');
 dotenv.config();
@@ -27,7 +29,9 @@ mongoose
 // Middlewares
 app.use('/images', express.static(path.join(__dirname, './public/images')));
 app.enable('trust proxy');
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"));
@@ -35,6 +39,8 @@ app.use(morgan("dev"));
 // Routes
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
+app.use("/api/conversations", conversationRoute);
+app.use("/api/messages", messageRoute)
 app.all('*', (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl} on this server`, 404));
 })
