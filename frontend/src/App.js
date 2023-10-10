@@ -32,11 +32,11 @@ function App() {
             path="/register"
             element={user ? <Navigate to="/" /> : <Register />}
           ></Route>
-          <Route path="/profile/:id" element={<Profile />}></Route>
           <Route
             path="/messenger"
-            element={user ? <Messenger /> : <Navigate to="/" />}>
-          </Route>
+            element={user ? <Messenger /> : <Navigate to="/" />}
+          ></Route>
+          <Route path="/profile/:id" element={<Profile />}></Route>
         </Routes>
       </Router>
     </>

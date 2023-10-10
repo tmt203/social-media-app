@@ -27,7 +27,21 @@ const getConversation = catchAsync(async (req, res, next) => {
   });
 });
 
+const getConversationByTwoUser = catchAsync(async (req, res, next) => {
+  const conversation = await Conversation.findOne({
+    members: { $all: [req.params.firstUserId, req.params.secondUserId] }
+  });
+
+  if (!conversation) return next(new AppError('There is no conversation with that two user ID.'), 404);
+
+  res.status(200).json({
+    status: 'success',
+    data: conversation
+  });
+});
+
 module.exports = {
   createConversation,
-  getConversation
+  getConversation,
+  getConversationByTwoUser
 }
